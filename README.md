@@ -1,5 +1,7 @@
 # Shopify Product Creation & File Upload Automation
 
+#main file will be converted into diff funtions shortly till then you can test this file .......
+
 This project automates the process of creating products on Shopify, uploading PDF files to Google Drive, and updating product details with Google Drive URLs. It also handles image matching, product activation, and deletion. The workflow integrates with a CSV file for tracking product details.
 
 ## Features
