@@ -449,16 +449,17 @@ def send_csv_to_webhook(csv_file_path: str, webhook_url: str):
 def main():
     logging.info("Starting main program execution")
     
-    # Hardcoded values (you can modify these as needed)
-    source_folder = "/home/vyavasthapak/Desktop/Store/2024Q3"
-    store_url = "project-digital-shop.myshopify.com"
-    access_token = "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"
-    credentials_path = "/home/vyavasthapak/Desktop/Bradely/python-444308-6e5be7255eac.json"
+    # Prompt user for dynamic values
+    source_folder = input("Enter the source folder path (e.g., /home/user/Store/2024Q3): ").strip()
+    logging.info(f"User entered source folder: {source_folder}")
     
-    logging.info(f"Using source folder: {source_folder}")
-    logging.info(f"Using store URL: {store_url}")
+    store_url = input("Enter the Shopify store URL (e.g., project-digital-shop.myshopify.com): ").strip()
+    logging.info(f"User entered store URL: {store_url}")
     
-    # Get user inputs
+    access_token = input("Enter the Shopify access token: ").strip()
+    logging.info(f"User entered access token.")
+
+    # Get user inputs for year and quarter
     year = input("Enter the year (e.g., 2024): ")
     logging.info(f"User entered year: {year}")
     
@@ -484,7 +485,6 @@ def main():
     # Process PDFs and create products
     process_pdfs(source_folder, store_url, access_token, config, year, quarter, markets_to_process)
 
-    
     # Process uploaded files and update with Google Drive links
     csv_file_path = os.path.join(source_folder, 'product_pdf_data.csv')
     if os.path.exists(csv_file_path):
@@ -492,8 +492,9 @@ def main():
         process_uploaded_files(csv_file_path, store_url, access_token, credentials_path)
     else:
         logging.error("CSV file not found!")
-    send_csv_to_webhook(csv_file_path, "https://hook.eu1.make.com/wdcdvyyfqli6rwhgj51jnu2d2yqrxpeg")
     
+    # Send the CSV to the webhook
+    send_csv_to_webhook(csv_file_path, "https://hook.eu1.make.com/wdcdvyyfqli6rwhgj51jnu2d2yqrxpeg")
     
     # Handle final action
     while True:
@@ -502,7 +503,7 @@ def main():
         
         if action in ['activate', 'delete', 'skip']:
             if action == 'activate':
-                activate_products(store_url, access_token , csv_file_path)
+                activate_products(store_url, access_token, csv_file_path)  # Pass the CSV path to the activation function
             elif action == 'delete':
                 delete_products(store_url, access_token)
             else:
@@ -513,6 +514,7 @@ def main():
             print("Invalid input. Please enter 'Activate', 'Delete', or 'Skip'.")
 
     logging.info("Program execution completed")
+
 
 if __name__ == "__main__":
     logging.info("="*50)
